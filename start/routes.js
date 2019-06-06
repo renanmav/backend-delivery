@@ -8,3 +8,7 @@ Route.get('/', () => {
 
 Route.post('users', 'UserController.store').validator('User')
 Route.post('sessions', 'SessionController.store')
+
+Route.group(() => {
+  Route.post('files', 'FileController.store')
+}).middleware(['auth'])

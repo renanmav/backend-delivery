@@ -18,7 +18,7 @@ services:
     build: .
     ports:
       - "8080:8080"
-    command: npm run start
+    command: npm run dev
     volumes:
       - ".:/usr/api"
     depends_on:
