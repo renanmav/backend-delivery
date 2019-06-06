@@ -12,6 +12,13 @@ class FileController {
 
       const fileName = `${Date.now()}.${upload.subtype}`
 
+      const file = await File.create({
+        name: upload.clientName,
+        file: fileName,
+        type: upload.type,
+        subtype: upload.subtype
+      })
+
       await upload.move(Helpers.tmpPath('uploads'), {
         name: fileName
       })
@@ -20,22 +27,21 @@ class FileController {
         throw upload.error()
       }
 
-      const file = await File.create({
-        file: fileName,
-        name: upload.clientName,
-        type: upload.type,
-        subtype: upload.subtype
-      })
-
       return file
     } catch (err) {
       return response
         .status(err.status)
-        .send({ error: { message: 'Erro no upload de arquivo' } })
+        .send({ error: { message: err.message } })
     }
   }
 
-  async show ({ params, request, response, view }) {}
+  async show ({ params, response }) {
+    const { name } = params
+
+    const file = await File.findByOrFail('file', name)
+
+    return response.download(Helpers.tmpPath(`uploads/${file.file}`))
+  }
 }
 
 module.exports = FileController
