@@ -1,28 +1,11 @@
-# Adonis API application
+# Pizza Don Juan Delivery API
 
-This is the boilerplate for creating an API server in AdonisJs, it comes pre-configured with.
-
-1. Bodyparser
-2. Authentication
-3. CORS
-4. Lucid ORM
-5. Migrations and seeds
+This is the REST API for the delivery app and website of Don Juan pizzeria.
 
 ## Setup
 
-Use the adonis command to install the blueprint
+Use the `docker-compose` command to execute start containers.
 
 ```bash
-adonis new yardstick --api-only
-```
-
-or manually clone the repo and then run `npm install`.
-
-
-### Migrations
-
-Run the following command to run startup migrations.
-
-```js
-adonis migration:run
+docker-compose up -d --build
 ```
