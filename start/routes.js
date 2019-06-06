@@ -6,5 +6,5 @@ Route.get('/', () => {
   return { yeap: 'the API is online' }
 })
 
-Route.post('users', 'UserController.store')
+Route.post('users', 'UserController.store').validator('User')
 Route.post('sessions', 'SessionController.store')
