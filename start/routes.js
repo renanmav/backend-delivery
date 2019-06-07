@@ -21,4 +21,4 @@ Route.group(() => {
   Route.resource('types', 'TypeController')
     .apiOnly()
     .except(['index', 'show'])
-}).middleware(['auth'])
+}).middleware(['auth', 'is_admin'])
