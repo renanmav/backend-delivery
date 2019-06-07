@@ -9,6 +9,10 @@ const BaseExceptionHandler = use('BaseExceptionHandler')
  *
  * @class ExceptionHandler
  */
+
+const Raven = require('raven')
+
+const Config = use('Config')
 class ExceptionHandler extends BaseExceptionHandler {
   /**
    * Handle exception thrown during the HTTP lifecycle
@@ -43,6 +47,10 @@ class ExceptionHandler extends BaseExceptionHandler {
    */
   async report (error, { request }) {
     console.log(error)
+
+    Raven.config(Config.get('services.sentry.dsn'))
+
+    Raven.captureException(error)
   }
 }
 
