@@ -1,92 +1,57 @@
 'use strict'
 
-/** @typedef {import('@adonisjs/framework/src/Request')} Request */
-/** @typedef {import('@adonisjs/framework/src/Response')} Response */
-/** @typedef {import('@adonisjs/framework/src/View')} View */
+const Type = use('App/Models/Type')
 
-/**
- * Resourceful controller for interacting with types
- */
 class TypeController {
-  /**
-   * Show a list of all types.
-   * GET types
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async index ({ request, response, view }) {
+  async index () {
+    const types = await Type.query()
+      .with('file')
+      .orderBy('id', 'asc')
+      .fetch()
+
+    return types
   }
 
-  /**
-   * Render a form to be used for creating a new type.
-   * GET types/create
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async create ({ request, response, view }) {
+  async store ({ request, auth }) {
+    var data = request.only(['name', 'description', 'time', 'grade', 'file_id'])
+
+    data.grade = Math.round(data.grade * 100) / 100
+
+    const type = await Type.create({
+      ...data,
+      user_id: auth.user.id
+    })
+
+    return type
   }
 
-  /**
-   * Create/save a new type.
-   * POST types
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async store ({ request, response }) {
+  async show ({ params }) {
+    const type = await Type.findOrFail(params.id)
+
+    await type.load('file')
+    await type.load('user')
+
+    return type
   }
 
-  /**
-   * Display a single type.
-   * GET types/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async show ({ params, request, response, view }) {
+  async update ({ params, request }) {
+    const type = await Type.findOrFail(params.id)
+
+    var data = request.only(['name', 'description', 'time', 'grade', 'file_id'])
+
+    data.grade = Math.round(data.grade * 100) / 100
+
+    type.merge(data)
+
+    await type.save()
+
+    return type
   }
 
-  /**
-   * Render a form to update an existing type.
-   * GET types/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
-  }
+  async destroy ({ params }) {
+    const type = await Type.findOrFail(params.id)
 
-  /**
-   * Update type details.
-   * PUT or PATCH types/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async update ({ params, request, response }) {
-  }
-
-  /**
-   * Delete a type with id.
-   * DELETE types/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async destroy ({ params, request, response }) {
+    await type.delete()
   }
 }
 

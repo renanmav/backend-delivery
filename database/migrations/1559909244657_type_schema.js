@@ -19,7 +19,7 @@ class TypeSchema extends Schema {
         .integer('time')
         .unsigned()
         .notNullable()
-      table.float('grade', 2).notNullable()
+      table.float('grade', 5, 2).notNullable()
       table
         .integer('file_id')
         .unsigned()
