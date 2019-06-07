@@ -18,7 +18,8 @@ Route.resource('types', 'TypeController')
 Route.group(() => {
   Route.post('files', 'FileController.store').validator('File')
 
+  Route.post('types', 'TypeController.store').validator('Type')
   Route.resource('types', 'TypeController')
     .apiOnly()
-    .except(['index', 'show'])
+    .except(['index', 'show', 'store'])
 }).middleware(['auth', 'is_admin'])
