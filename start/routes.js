@@ -12,5 +12,5 @@ Route.post('sessions', 'SessionController.store')
 Route.get('files/:name', 'FileController.show')
 
 Route.group(() => {
-  Route.post('files', 'FileController.store')
+  Route.post('files', 'FileController.store').validator('File')
 }).middleware(['auth'])

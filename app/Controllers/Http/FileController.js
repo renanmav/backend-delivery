@@ -8,7 +8,13 @@ class FileController {
     try {
       if (!request.file('file')) return
 
-      const upload = request.file('file', { size: '2mb' })
+      const validationOptions = {
+        type: ['image', 'application'],
+        size: '2mb',
+        extname: ['png', 'jpg', 'jpeg', 'pdf']
+      }
+
+      const upload = request.file('file', validationOptions)
 
       const fileName = `${Date.now()}.${upload.subtype}`
 
