@@ -6,7 +6,10 @@ class ProductSchema extends Schema {
   up () {
     this.create('products', table => {
       table.increments()
-      table.string('name', 254).notNullable()
+      table
+        .string('name', 254)
+        .notNullable()
+        .unique()
       table
         .integer('user_id')
         .unsigned()

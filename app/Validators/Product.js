@@ -7,7 +7,7 @@ class Product {
 
   get rules () {
     return {
-      name: 'required',
+      name: 'required|unique:products',
       file_id: 'required'
     }
   }

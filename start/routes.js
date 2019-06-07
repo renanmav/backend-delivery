@@ -45,7 +45,11 @@ Route.get('types/:types_id/products', 'ProductController.index')
 Route.get('products/:id', 'ProductController.show')
 
 Route.group(() => {
+  Route.post('types/:types_id/products', 'ProductController.store').validator(
+    'Product'
+  )
+
   Route.resource('products', 'ProductController')
     .apiOnly()
-    .except(['index', 'show'])
+    .except(['index', 'show', 'store'])
 }).middleware(['auth', 'is_admin'])
