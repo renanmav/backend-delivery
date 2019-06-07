@@ -41,6 +41,7 @@ Route.group(() => {
 /**
  * Product
  */
+
 Route.get('types/:types_id/products', 'ProductController.index')
 Route.get('products/:id', 'ProductController.show')
 
@@ -50,6 +51,21 @@ Route.group(() => {
   )
 
   Route.resource('products', 'ProductController')
+    .apiOnly()
+    .except(['index', 'show', 'store'])
+}).middleware(['auth', 'is_admin'])
+
+/**
+ * Size
+ */
+
+Route.get('products/:products_id/sizes', 'SizeController.index')
+Route.get('sizes/:id', 'SizeController.show')
+
+Route.group(() => {
+  Route.post('products/:products_id/sizes', 'SizeController.store')
+
+  Route.resource('sizes', 'SizeController')
     .apiOnly()
     .except(['index', 'show', 'store'])
 }).middleware(['auth', 'is_admin'])
