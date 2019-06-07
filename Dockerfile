@@ -15,4 +15,6 @@ EXPOSE 8080
 
 RUN npm i -g @adonisjs/cli
 
+RUN adonis install @adonisjs/validator
+
 CMD ["adonis", "serve", "--dev"]
