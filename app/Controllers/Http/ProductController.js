@@ -1,92 +1,52 @@
 'use strict'
 
-/** @typedef {import('@adonisjs/framework/src/Request')} Request */
-/** @typedef {import('@adonisjs/framework/src/Response')} Response */
-/** @typedef {import('@adonisjs/framework/src/View')} View */
+const Product = use('App/Models/Product')
 
-/**
- * Resourceful controller for interacting with products
- */
 class ProductController {
-  /**
-   * Show a list of all products.
-   * GET products
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async index ({ request, response, view }) {
+  async index ({ params }) {
+    const products = await Product.query()
+      .where('type_id', params.types_id)
+      .with('file')
+      .orderBy('id', 'asc')
+      .fetch()
+
+    return products
   }
 
-  /**
-   * Render a form to be used for creating a new product.
-   * GET products/create
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async create ({ request, response, view }) {
+  async store ({ request, params, auth }) {
+    const data = request.only(['name', 'file_id'])
+
+    const product = await Product.create({
+      ...data,
+      type_id: params.types_id,
+      user_id: auth.user.id
+    })
+
+    return product
   }
 
-  /**
-   * Create/save a new product.
-   * POST products
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async store ({ request, response }) {
+  async show ({ params }) {
+    const product = await Product.findOrFail(params.id)
+
+    return product
   }
 
-  /**
-   * Display a single product.
-   * GET products/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async show ({ params, request, response, view }) {
-  }
-
-  /**
-   * Render a form to update an existing product.
-   * GET products/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
-  }
-
-  /**
-   * Update product details.
-   * PUT or PATCH products/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
   async update ({ params, request, response }) {
+    const product = await Product.findOrFail(params.id)
+
+    const data = request.only(['name', 'file_id', 'type_id'])
+
+    product.merge(data)
+
+    await product.save()
+
+    return product
   }
 
-  /**
-   * Delete a product with id.
-   * DELETE products/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
   async destroy ({ params, request, response }) {
+    const product = await Product.findOrFail(params.id)
+
+    await product.delete()
   }
 }
 
