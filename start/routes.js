@@ -63,7 +63,9 @@ Route.get('products/:products_id/sizes', 'SizeController.index')
 Route.get('sizes/:id', 'SizeController.show')
 
 Route.group(() => {
-  Route.post('products/:products_id/sizes', 'SizeController.store')
+  Route.post('products/:products_id/sizes', 'SizeController.store').validator(
+    'Size'
+  )
 
   Route.resource('sizes', 'SizeController')
     .apiOnly()
