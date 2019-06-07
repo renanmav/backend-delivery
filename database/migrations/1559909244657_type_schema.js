@@ -23,10 +23,11 @@ class TypeSchema extends Schema {
       table
         .integer('file_id')
         .unsigned()
+        .notNullable()
         .references('id')
         .inTable('files')
         .onUpdate('CASCADE')
-        .onDelete('SET NULL')
+        .onDelete('CASCADE')
       table.timestamps()
     })
   }

@@ -5,7 +5,7 @@
   "description": "Adonisjs boilerplate for API server with pre-configured JWT",
   "main": "index.js",
   "scripts": {
-    "dev": "adonis migration:rollback && adonis migration:run && adonis seed && adonis serve --dev",
+    "dev": "adonis migration:reset && adonis migration:run && adonis seed && adonis serve --dev",
     "test": "node ace test"
   },
   "keywords": [
