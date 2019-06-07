@@ -1,92 +1,73 @@
 'use strict'
 
-/** @typedef {import('@adonisjs/framework/src/Request')} Request */
-/** @typedef {import('@adonisjs/framework/src/Response')} Response */
-/** @typedef {import('@adonisjs/framework/src/View')} View */
+const Order = use('App/Models/Order')
+const Database = use('Database')
 
-/**
- * Resourceful controller for interacting with orders
- */
 class OrderController {
-  /**
-   * Show a list of all orders.
-   * GET orders
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async index ({ request, response, view }) {
+  async index () {
+    console.log('chegou aqui')
+
+    const orders = await Order.query()
+      .with('products')
+      .orderBy('id', 'asc')
+      .fetch()
+
+    return orders
   }
 
-  /**
-   * Render a form to be used for creating a new order.
-   * GET orders/create
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async create ({ request, response, view }) {
+  async indexByUser ({ auth }) {
+    const orders = await Order.query()
+      .where('user_id', auth.user.id)
+      .with('products')
+      .orderBy('id', 'desc')
+      .fetch()
+
+    return orders
   }
 
-  /**
-   * Create/save a new order.
-   * POST orders
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async store ({ request, response }) {
+  async store ({ request }) {
+    const data = request.only([
+      'total_price',
+      'cep',
+      'street',
+      'number',
+      'district'
+    ])
+
+    const products = request.only('products')
+
+    const trx = await Database.beginTransaction()
+
+    const order = await Order.create(data, trx)
+    await order.products().createMany(products, trx)
+
+    await trx.commit()
+
+    return order
   }
 
-  /**
-   * Display a single order.
-   * GET orders/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async show ({ params, request, response, view }) {
+  async show ({ params }) {
+    const order = await Order.findOrFail(params.id)
+
+    return order
   }
 
-  /**
-   * Render a form to update an existing order.
-   * GET orders/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
+  async update ({ params, request }) {
+    const order = await Order.findOrFail(params.id)
+
+    const data = request.only(['cep', 'street', 'number', 'district'])
+
+    order.merge(data)
+
+    await order.save()
+
+    return order
   }
 
-  /**
-   * Update order details.
-   * PUT or PATCH orders/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async update ({ params, request, response }) {
-  }
+  async destroy ({ params }) {
+    const order = await Order.findOrFail(params.id)
 
-  /**
-   * Delete a order with id.
-   * DELETE orders/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async destroy ({ params, request, response }) {
+    await order.delete()
   }
 }
 

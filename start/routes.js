@@ -71,3 +71,13 @@ Route.group(() => {
     .apiOnly()
     .except(['index', 'show', 'store'])
 }).middleware(['auth', 'is_admin'])
+
+/**
+ * Order
+ */
+
+Route.get('users/orders', 'OrderController.indexByUser').middleware(['auth'])
+
+Route.group(() => {
+  Route.resource('orders', 'OrderController').apiOnly()
+}).middleware(['auth', 'is_admin'])
