@@ -6,6 +6,13 @@ class TypeSchema extends Schema {
   up () {
     this.create('types', table => {
       table.increments()
+      table
+        .integer('user_id')
+        .unsigned()
+        .references('id')
+        .inTable('users')
+        .onUpdate('CASCADE')
+        .onDelete('SET NULL')
       table.string('name', 254).notNullable()
       table.text('description').notNullable()
       table
