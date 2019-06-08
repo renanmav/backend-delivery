@@ -76,8 +76,14 @@ Route.group(() => {
  * Order
  */
 
-Route.get('users/orders', 'OrderController.indexByUser').middleware(['auth'])
+Route.group(() => {
+  Route.get('users/orders', 'OrderController.indexByUser')
+  Route.get('orders/:id', 'OrderController.show')
+  Route.post('orders', 'OrderController.store')
+}).middleware(['auth'])
 
 Route.group(() => {
-  Route.resource('orders', 'OrderController').apiOnly()
+  Route.resource('orders', 'OrderController')
+    .apiOnly()
+    .except('show', 'store')
 }).middleware(['auth', 'is_admin'])

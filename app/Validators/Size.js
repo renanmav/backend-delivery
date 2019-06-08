@@ -7,7 +7,7 @@ class Size {
 
   get rules () {
     return {
-      name: 'required|unique:sizes',
+      name: 'required',
       price: 'required|number|range:-0.01,100000',
       file_id: 'required'
     }

@@ -6,11 +6,8 @@ class SizeSchema extends Schema {
   up () {
     this.create('sizes', table => {
       table.increments()
-      table
-        .string('name', 254)
-        .notNullable()
-        .unique()
-      table.decimal('price').notNullable()
+      table.string('name', 254).notNullable()
+      table.float('price').notNullable()
       table
         .integer('user_id')
         .unsigned()

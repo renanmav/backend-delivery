@@ -1,14 +1,12 @@
 'use strict'
 
 const Order = use('App/Models/Order')
-const Database = use('Database')
+const User = use('App/Models/User')
 
 class OrderController {
   async index () {
-    console.log('chegou aqui')
-
     const orders = await Order.query()
-      .with('products')
+      .with('sizes.product')
       .orderBy('id', 'asc')
       .fetch()
 
@@ -18,14 +16,14 @@ class OrderController {
   async indexByUser ({ auth }) {
     const orders = await Order.query()
       .where('user_id', auth.user.id)
-      .with('products')
+      .with('sizes.product.type')
       .orderBy('id', 'desc')
       .fetch()
 
     return orders
   }
 
-  async store ({ request }) {
+  async store ({ request, auth }) {
     const data = request.only([
       'total_price',
       'cep',
@@ -34,20 +32,26 @@ class OrderController {
       'district'
     ])
 
-    const products = request.only('products')
+    const { sizes_id: sizesId } = request.only('sizes_id')
 
-    const trx = await Database.beginTransaction()
+    const order = await Order.create({ ...data, user_id: auth.user.id })
+    await order.sizes().attach(sizesId)
 
-    const order = await Order.create(data, trx)
-    await order.products().createMany(products, trx)
-
-    await trx.commit()
+    await order.load('sizes.product')
 
     return order
   }
 
-  async show ({ params }) {
+  async show ({ params, auth, response }) {
     const order = await Order.findOrFail(params.id)
+
+    const user = await User.find(auth.user.id)
+
+    if (order.user_id !== auth.user.id && !user.is_admin) {
+      return response.unauthorized()
+    }
+
+    await order.load('sizes.product.type')
 
     return order
   }

@@ -30,6 +30,8 @@ class SizeController {
   async show ({ params }) {
     const size = await Size.findOrFail(params.id)
 
+    await size.load('product')
+
     return size
   }
 

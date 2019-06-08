@@ -13,13 +13,6 @@ class OrderSchema extends Schema {
         .inTable('users')
         .onUpdate('CASCADE')
         .onDelete('SET NULL')
-      table
-        .integer('product_id')
-        .unsigned()
-        .references('id')
-        .inTable('products')
-        .onUpdate('CASCADE')
-        .onDelete('NO ACTION')
       table.decimal('total_price').notNullable()
       table.string('cep')
       table.string('street').notNullable()
