@@ -39,7 +39,7 @@ class TypeController {
 
     var data = request.only(['name', 'description', 'time', 'grade', 'file_id'])
 
-    data.grade = Math.round(data.grade * 100) / 100
+    if (data.grade) data.grade = Math.round(data.grade * 100) / 100
 
     type.merge(data)
 
