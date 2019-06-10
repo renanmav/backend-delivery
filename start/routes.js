@@ -80,7 +80,7 @@ Route.group(() => {
 Route.group(() => {
   Route.get('users/orders', 'OrderController.indexByUser')
   Route.get('orders/:id', 'OrderController.show')
-  Route.post('orders', 'OrderController.store')
+  Route.post('orders', 'OrderController.store').validator('Order')
 }).middleware(['auth'])
 
 Route.group(() => {
