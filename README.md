@@ -12,7 +12,7 @@ docker-compose up -d --build
 
 ## Entity Relationship Diagram
 
-![ERD](https://i.imgur.com/s5Ue9Vv.jpg)
+![ERD](https://i.imgur.com/UUiLPtB.jpg)
 
 - **Size** is a strong entity since it labels the price
 - Only admin users can perform PUT and DELETE requests
