@@ -22,6 +22,7 @@ docker-compose up -d --build
 
 - `.env` pre-configurated, feel free to change it.
 - Route for upload (POST on `/files`) accepts either `id` or `name` query params.
+- Insomnia workspace is available [here](https://gist.githubusercontent.com/renanmav/d6612d258e9fa1a0d9a4568af5a92da3/raw/f9a947f3058b45b30abfcefcdb44db2b7a8b0b1e/insomnia-backend-pizza.json)
 
 ## Routes
 
