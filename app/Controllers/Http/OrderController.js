@@ -29,7 +29,8 @@ class OrderController {
       'cep',
       'street',
       'number',
-      'district'
+      'district',
+      'observation'
     ])
 
     const { sizes_id: sizesId } = request.only('sizes_id')

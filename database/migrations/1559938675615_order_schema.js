@@ -18,6 +18,7 @@ class OrderSchema extends Schema {
       table.string('street').notNullable()
       table.string('number').notNullable()
       table.string('district').notNullable()
+      table.text('observation')
       table.timestamps()
     })
   }
