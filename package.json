@@ -1,20 +1,24 @@
 {
-  "name": "adonis-api-app",
-  "version": "4.1.0",
+  "name": "backend-pizza",
+  "version": "1.0.0",
   "adonis-version": "4.1.0",
-  "description": "Adonisjs boilerplate for API server with pre-configured JWT",
-  "main": "index.js",
+  "description": "REST API for pizza delivery built with NodeJS and AdonisJS",
+  "main": "server.js",
   "scripts": {
-    "dev": "adonis migration:reset && adonis migration:run && adonis seed && adonis serve --dev",
+    "cleanup": "adonis migration:reset && adonis migration:run && adonis seed && adonis serve --dev",
+    "dev": "adonis migration:run && adonis seed && adonis serve --dev",
     "test": "node ace test"
   },
   "keywords": [
     "adonisjs",
-    "adonis-app"
+    "adonis-app",
+    "delivery",
+    "rest",
+    "api"
   ],
-  "author": "",
+  "author": "Renan Machado",
   "license": "UNLICENSED",
-  "private": true,
+  "private": false,
   "dependencies": {
     "@adonisjs/ace": "^5.0.8",
     "@adonisjs/auth": "^3.0.7",
