@@ -6,6 +6,7 @@ const User = use('App/Models/User')
 class OrderController {
   async index () {
     const orders = await Order.query()
+      .with('user')
       .with('sizes.product')
       .orderBy('id', 'asc')
       .fetch()
